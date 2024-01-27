@@ -37,12 +37,18 @@ public class MessageController {
     }
 
     @GetMapping(path = "/allMessage")
-    public List<Message> getAllMessage(@RequestHeader Map<String, String> headers, @RequestParam int idReceive) throws Exception {
-        String email= jwtService.extractUserMail(headers.get("authorization").substring(7));
-        User userSend=userService.findByEmail(email).get();
-        User userReceive=userService.findById(idReceive).get();
-        System.out.println("users : "+userSend+" "+userReceive);
-        return userService.findByUserSendAndUserReceive(userSend, userReceive);
+    public Object getAllMessage(@RequestHeader Map<String, String> headers, @RequestParam int idReceive) 
+    throws Exception {
+        try {
+            String email= jwtService.extractUserMail(headers.get("authorization").substring(7));
+            User userSend=userService.findByEmail(email).get();
+            User userReceive=userService.findById(idReceive).get();
+            System.out.println("users : "+userSend+" "+userReceive);
+            return userService.findByUserSendAndUserReceive(userSend, userReceive);
+        } catch (Exception e) {
+            return e;
+        }
+        return null;
     }
 
     @GetMapping(path = "/allUserDiscuss")
