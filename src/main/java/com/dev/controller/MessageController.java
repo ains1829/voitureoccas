@@ -46,9 +46,9 @@ public class MessageController {
             System.out.println("users : "+userSend+" "+userReceive);
             return userService.findByUserSendAndUserReceive(userSend, userReceive);
         } catch (Exception e) {
+            e.printStackTrace();
             return e;
         }
-        return null;
     }
 
     @GetMapping(path = "/allUserDiscuss")
