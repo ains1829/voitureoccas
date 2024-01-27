@@ -1,5 +1,6 @@
 package com.dev.model.message;
 
+import java.time.Instant;
 import java.util.Date;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -28,5 +29,5 @@ public class Message {
     UserMess userReceive;
     String contenu;
     int typemessage;
-    Date dateHeureMessage;
+    Instant dateHeureMessage;
 }

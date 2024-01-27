@@ -2,22 +2,16 @@ package com.dev.service.implementation;
 
 import java.util.Optional;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
-
 import com.dev.model.message.Message;
 import com.dev.model.message.user.UserMess;
 import com.dev.model.user.User;
@@ -25,10 +19,6 @@ import com.dev.repository.MessageRepository;
 import com.dev.repository.UserRepository;
 import com.dev.service.UserService;
 import com.dev.utils.TokenUtils;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 
 import lombok.RequiredArgsConstructor;
 
@@ -73,14 +63,12 @@ public class UserServiceImpl implements UserService{
         send.setNom(userSend.getNom());
         send.setPrenom(userSend.getPrenom());
         send.setMail(userSend.getMail());
-        send.setDate(userSend.getDate());
         UserMess receive=new UserMess();
         receive.setId(userReceive.getId());
         receive.setNom(userReceive.getNom());
         receive.setPrenom(userReceive.getPrenom());
         receive.setMail(userReceive.getMail());
-        receive.setDate(userReceive.getDate());
-        Message message=new Message(null, send, receive, contenu, 1, new Date());
+        Message message=new Message(null, send, receive, contenu, 1, Instant.now());
         messageRepository.save(message);
         return message;
     }
@@ -102,13 +90,11 @@ public class UserServiceImpl implements UserService{
         send.setNom(userSend.getNom());
         send.setPrenom(userSend.getPrenom());
         send.setMail(userSend.getMail());
-        send.setDate(userSend.getDate());
         UserMess receive=new UserMess();
         receive.setId(userReceive.getId());
         receive.setNom(userReceive.getNom());
         receive.setPrenom(userReceive.getPrenom());
         receive.setMail(userReceive.getMail());
-        receive.setDate(userReceive.getDate());
         Criteria criteria = new Criteria().orOperator(
             Criteria.where("userSend").is(send).and("userReceive").is(receive),
             Criteria.where("userSend").is(receive).and("userReceive").is(send)
@@ -127,7 +113,6 @@ public class UserServiceImpl implements UserService{
         connected.setNom(user.getNom());
         connected.setPrenom(user.getPrenom());
         connected.setMail(user.getMail());
-        connected.setDate(user.getDate());
         Query query = new Query(Criteria.where("userSend").is(connected));
         List<Message> userSendList = mongoTemplate.find(query, Message.class);
         Query query2 = new Query(Criteria.where("userReceive").is(connected));
