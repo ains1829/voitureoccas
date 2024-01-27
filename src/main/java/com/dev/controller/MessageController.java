@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dev.config.JwtService;
 import com.dev.model.message.Message;
+import com.dev.model.message.user.UserMess;
 import com.dev.model.user.User;
 import com.dev.service.UserService;
 
@@ -52,7 +53,7 @@ public class MessageController {
     }
 
     @GetMapping(path = "/allUserDiscuss")
-    public List<User> getAllPersonneDiscuss(@RequestHeader Map<String, String> headers) {
+    public List<UserMess> getAllPersonneDiscuss(@RequestHeader Map<String, String> headers) {
         String email= jwtService.extractUserMail(headers.get("authorization").substring(7));
         User user=userService.findByEmail(email).get();
         System.out.println(user);

@@ -19,6 +19,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 
 import com.dev.model.message.Message;
+import com.dev.model.message.user.UserMess;
 import com.dev.model.user.User;
 import com.dev.repository.MessageRepository;
 import com.dev.repository.UserRepository;
@@ -67,7 +68,19 @@ public class UserServiceImpl implements UserService{
     @Override
     public Message envoyerMessage(User userSend, User userReceive, String contenu, Timestamp dateTime)
     throws Exception {
-        Message message=new Message(null, userSend, userReceive, contenu, 1, new Date());
+        UserMess send=new UserMess();
+        send.setId(userSend.getId());
+        send.setNom(userSend.getNom());
+        send.setPrenom(userSend.getPrenom());
+        send.setMail(userSend.getMail());
+        send.setDate(userSend.getDate());
+        UserMess receive=new UserMess();
+        receive.setId(userReceive.getId());
+        receive.setNom(userReceive.getNom());
+        receive.setPrenom(userReceive.getPrenom());
+        receive.setMail(userReceive.getMail());
+        receive.setDate(userReceive.getDate());
+        Message message=new Message(null, send, receive, contenu, 1, new Date());
         messageRepository.save(message);
         return message;
     }
@@ -84,9 +97,21 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public List<Message> findByUserSendAndUserReceive(User userSend, User userReceive) {
+        UserMess send=new UserMess();
+        send.setId(userSend.getId());
+        send.setNom(userSend.getNom());
+        send.setPrenom(userSend.getPrenom());
+        send.setMail(userSend.getMail());
+        send.setDate(userSend.getDate());
+        UserMess receive=new UserMess();
+        receive.setId(userReceive.getId());
+        receive.setNom(userReceive.getNom());
+        receive.setPrenom(userReceive.getPrenom());
+        receive.setMail(userReceive.getMail());
+        receive.setDate(userReceive.getDate());
         Criteria criteria = new Criteria().orOperator(
-            Criteria.where("userSend").is(userSend).and("userReceive").is(userReceive),
-            Criteria.where("userSend").is(userReceive).and("userReceive").is(userSend)
+            Criteria.where("userSend").is(send).and("userReceive").is(receive),
+            Criteria.where("userSend").is(receive).and("userReceive").is(send)
         );
 
         Query query = new Query(criteria).with(Sort.by(Sort.Order.asc("dateHeureMessage")));
@@ -96,13 +121,19 @@ public class UserServiceImpl implements UserService{
 	}
 
     @Override
-    public List<User> findDistinctUsersForUser(User user) {
-        Query query = new Query(Criteria.where("userSend").is(user));
+    public List<UserMess> findDistinctUsersForUser(User user) {
+        UserMess connected=new UserMess();
+        connected.setId(user.getId());
+        connected.setNom(user.getNom());
+        connected.setPrenom(user.getPrenom());
+        connected.setMail(user.getMail());
+        connected.setDate(user.getDate());
+        Query query = new Query(Criteria.where("userSend").is(connected));
         List<Message> userSendList = mongoTemplate.find(query, Message.class);
-        Query query2 = new Query(Criteria.where("userReceive").is(user));
+        Query query2 = new Query(Criteria.where("userReceive").is(connected));
         List<Message> userReceive = mongoTemplate.find(query, Message.class);
-        HashMap<Integer, User> users=new HashMap<>();
-        List<User> result=new ArrayList<>();
+        HashMap<Integer, UserMess> users=new HashMap<>();
+        List<UserMess> result=new ArrayList<>();
         for(int i=0; i<userSendList.size(); i++) {
             if(users.get(userSendList.get(i).getUserReceive().getId())==null) {
                 users.put(userSendList.get(i).getUserReceive().getId(), userSendList.get(i).getUserReceive());

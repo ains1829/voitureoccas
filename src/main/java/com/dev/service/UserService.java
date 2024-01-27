@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import com.dev.model.message.Message;
+import com.dev.model.message.user.UserMess;
 import com.dev.model.user.User;
 
 public interface UserService {
@@ -17,5 +18,5 @@ public interface UserService {
 
     public List<Message> findByUserSendAndUserReceive(User userSend, User userReceive);
 
-    public List<User> findDistinctUsersForUser(User user);
+    public List<UserMess> findDistinctUsersForUser(User user);
 }

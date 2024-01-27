@@ -3,6 +3,8 @@ package com.dev.model.message;
 import java.util.Date;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.dev.model.message.user.UserMess;
 import com.dev.model.user.User;
 
 import jakarta.persistence.GeneratedValue;
@@ -22,8 +24,8 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     String idMessage;
-    User userSend;
-    User userReceive;
+    UserMess userSend;
+    UserMess userReceive;
     String contenu;
     int typemessage;
     Date dateHeureMessage;
