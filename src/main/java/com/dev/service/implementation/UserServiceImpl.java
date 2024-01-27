@@ -68,7 +68,9 @@ public class UserServiceImpl implements UserService{
         receive.setNom(userReceive.getNom());
         receive.setPrenom(userReceive.getPrenom());
         receive.setMail(userReceive.getMail());
-        Message message=new Message(null, send, receive, contenu, 1, Instant.now());
+        // java.util.Date utilDate = new java.util.Date();
+        // Timestamp timestamp = new Timestamp(utilDate.getTime());
+        Message message=new Message(null, send, receive, contenu, 1, new java.util.Date());
         messageRepository.save(message);
         return message;
     }

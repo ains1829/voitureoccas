@@ -1,6 +1,4 @@
 package com.dev.model.message;
-
-import java.time.Instant;
 import java.util.Date;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,10 +14,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Document(collection = "message")
 public class Message {
     @Id
@@ -29,5 +23,52 @@ public class Message {
     UserMess userReceive;
     String contenu;
     int typemessage;
-    Instant dateHeureMessage;
+    Date dateHeureMessage;
+    public Message() {
+    }
+    public Message(String idMessage, UserMess userSend, UserMess userReceive, String contenu, int typemessage,
+            Date dateHeureMessage) {
+        this.idMessage = idMessage;
+        this.userSend = userSend;
+        this.userReceive = userReceive;
+        this.contenu = contenu;
+        this.typemessage = typemessage;
+        this.dateHeureMessage = dateHeureMessage;
+    }
+    public String getIdMessage() {
+        return idMessage;
+    }
+    public void setIdMessage(String idMessage) {
+        this.idMessage = idMessage;
+    }
+    public UserMess getUserSend() {
+        return userSend;
+    }
+    public void setUserSend(UserMess userSend) {
+        this.userSend = userSend;
+    }
+    public UserMess getUserReceive() {
+        return userReceive;
+    }
+    public void setUserReceive(UserMess userReceive) {
+        this.userReceive = userReceive;
+    }
+    public String getContenu() {
+        return contenu;
+    }
+    public void setContenu(String contenu) {
+        this.contenu = contenu;
+    }
+    public int getTypemessage() {
+        return typemessage;
+    }
+    public void setTypemessage(int typemessage) {
+        this.typemessage = typemessage;
+    }
+    public Date getDateHeureMessage() {
+        return dateHeureMessage;
+    }
+    public void setDateHeureMessage(Date dateHeureMessage) {
+        this.dateHeureMessage = dateHeureMessage;
+    }
 }
